@@ -79,21 +79,21 @@ function handleAddTask(workspaceItem) {
     const taskId = `task-${SidebarState.taskCounter}`;
     
     const taskHTML = `
-        <div class="task-item" data-task-id="${taskId}">
+        <div class="task-item" data-task-id="${taskId}" data-pinned="false">
             <img src="navbar-icon/task.svg" alt="Task" class="submenu-icon" width="16" height="16">
             <span class="task-name" data-editable="true">New Task</span>
             <div class="dropdown">
                 <button class="dropdown-toggle" aria-label="Task options">
                     <svg width="16" height="16" viewBox="0 0 16 16">
-                                        <circle cx="8" cy="4" r="1" fill="currentColor"/>
-                                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
-                                        <circle cx="8" cy="12" r="1" fill="currentColor"/>
-                                    </svg>
+                        <circle cx="8" cy="4" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="8" r="1" fill="currentColor"/>
+                        <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                    </svg>
                 </button>
                 <div class="dropdown-menu">
                     <button class="dropdown-item" data-action="grant-access">Grant access</button>
                     <button class="dropdown-item" data-action="rename">Rename</button>
-                    <button class="dropdown-item" data-action="pin">Pin</button>
+                    <button class="dropdown-item" data-action="pin" data-pin-text="Pin">Pin</button>
                     <button class="dropdown-item" data-action="delete">Delete</button>
                 </div>
             </div>
@@ -103,13 +103,38 @@ function handleAddTask(workspaceItem) {
     const submenu = workspaceItem.querySelector('.workspace-submenu');
     submenu.insertAdjacentHTML('beforeend', taskHTML);
     
-    // only init the new task event listener
+    // get the new task element
     const newTask = document.querySelector(`[data-task-id="${taskId}"]`);
-    initializeSingleDropdown(newTask.querySelector('.dropdown'));
-    initializeSingleEditableElement(newTask.querySelector('.task-name'));
     
-    // editing the new task name
+    // manually init the dropdown for this new task
+    const dropdown = newTask.querySelector('.dropdown');
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    const menu = dropdown.querySelector('.dropdown-menu');
+    
+    // add click event to toggle
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown(dropdown);
+    });
+    
+    // add click events to dropdown items
+    const items = dropdown.querySelectorAll('.dropdown-item');
+    items.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleDropdownAction(item, dropdown);
+        });
+    });
+    
+    // init editable function for the task name
     const nameElement = newTask.querySelector('.task-name');
+    nameElement.addEventListener('click', () => {
+        if (!SidebarState.editingElement) {
+            startEditing(nameElement);
+        }
+    });
+    
+    // edit the new task name
     setTimeout(() => startEditing(nameElement), 100);
     
     console.log(`New task added: ${taskId}`);

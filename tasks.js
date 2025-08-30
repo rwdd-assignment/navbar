@@ -6,16 +6,48 @@
 /**
  * handle pinning tasks
  */
+/**
+ * Handle pinning/unpinning tasks
+ */
 function handlePinTask(taskItem) {
     if (!taskItem) return;
     
-    const workspaceItem = taskItem.closest('.workspace-item');
-    const submenu = workspaceItem.querySelector('.workspace-submenu');
+    const isPinned = taskItem.dataset.pinned === 'true';
     
-    // move task to top of submenu
-    submenu.insertBefore(taskItem, submenu.firstChild);
-    
-    console.log('Task pinned to top');
+    if (isPinned) {
+        // Unpin the task
+        taskItem.dataset.pinned = 'false';
+        
+        
+        // move it to the end of the submenu
+        const workspaceItem = taskItem.closest('.workspace-item');
+        const submenu = workspaceItem.querySelector('.workspace-submenu');
+        submenu.appendChild(taskItem);
+        
+        // Update dropdown text back to "Pin"
+        const dropdown = taskItem.querySelector('.dropdown');
+        const pinButton = dropdown.querySelector('[data-action="pin"]');
+        pinButton.textContent = 'Pin';
+        pinButton.dataset.pinText = 'Pin';
+        
+        console.log('Task unpinned');
+    } else {
+        // Pin the task
+        taskItem.dataset.pinned = 'true';
+        
+        // Move task to top of submenu
+        const workspaceItem = taskItem.closest('.workspace-item');
+        const submenu = workspaceItem.querySelector('.workspace-submenu');
+        submenu.insertBefore(taskItem, submenu.firstChild);
+        
+        // "Unpin" the task
+        const dropdown = taskItem.querySelector('.dropdown');
+        const pinButton = dropdown.querySelector('[data-action="pin"]');
+        pinButton.textContent = 'Unpin';
+        pinButton.dataset.pinText = 'Unpin';
+        
+        console.log('Task pinned to top');
+    }
 }
 
 /**
