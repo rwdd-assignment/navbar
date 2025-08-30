@@ -103,12 +103,12 @@ function handleAddTask(workspaceItem) {
     const submenu = workspaceItem.querySelector('.workspace-submenu');
     submenu.insertAdjacentHTML('beforeend', taskHTML);
     
-    // re-init dropdown and editable elements
-    initializeDropdowns();
-    initializeEditableElements();
-    
-    // start editing the new task name
+    // only init the new task event listener
     const newTask = document.querySelector(`[data-task-id="${taskId}"]`);
+    initializeSingleDropdown(newTask.querySelector('.dropdown'));
+    initializeSingleEditableElement(newTask.querySelector('.task-name'));
+    
+    // editing the new task name
     const nameElement = newTask.querySelector('.task-name');
     setTimeout(() => startEditing(nameElement), 100);
     
