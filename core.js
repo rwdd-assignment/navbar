@@ -21,7 +21,7 @@ const DOM = {
 };
 
 /**
- * Initialize DOM element references
+ * init DOM element references
  */
 function initializeDOM() {
     DOM.sidebar = document.getElementById('sidebar');

@@ -8,10 +8,10 @@
 // For now, we're using script tags in HTML to load dependencies
 
 /**
- * Initialize sidebar when DOM is loaded
+ * init sidebar when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the sidebar
+    // init the sidebar
     initializeSidebar();
     
     console.log('All modules loaded and sidebar initialized');
