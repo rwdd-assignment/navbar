@@ -210,7 +210,7 @@
 .workspace-item {
     margin-bottom: 8px;
     position: relative;
-    z-index: 1;
+    z-index: 0.5;
 }
 
 .workspace-header-item {
@@ -283,8 +283,8 @@
 
 /* dropdown styles */
 .dropdown {
-    position: relative;
-    z-index: 9999;
+    position: relative; /* Create positioning context for absolute dropdown */
+    /* z-index: 99999; Much higher z-index/ */
 }
 
 .dropdown-toggle {
@@ -298,6 +298,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 0.5;
 }
 
 .dropdown-toggle:hover {
@@ -306,36 +307,57 @@
 }
 
 .dropdown-menu {
-    position: fixed;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    position: fixed; /* Use fixed positioning to escape sidebar stacking context */
+    background: #f8f9fa !important; 
+    background-color: #f8f9fa !important;
+    background-image: none !important; 
+    border: 2px solid #e0e0e0; 
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     min-width: 160px;
-    z-index: 9999;
+    z-index: 999999; 
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px);
     transition: all 0.2s ease;
+
+    padding: 4px 0; 
+    overflow: visible; 
+    isolation: isolate; 
+    backdrop-filter: none !important; 
+    -webkit-backdrop-filter: none !important; 
+    mix-blend-mode: normal !important; 
+    filter: none !important; 
+    opacity: 1 !important;
+    background-clip: padding-box !important;
+    -webkit-opacity: 1 !important;
+    -moz-opacity: 1 !important;
+    -ms-opacity: 1 !important;
+    position: fixed !important;
+    z-index: 999999 !important;
 }
 
 .dropdown.active .dropdown-menu {
-    opacity: 1;
+    opacity: 1 !important;
     visibility: visible;
     transform: translateY(0);
+    background: #f8f9fa !important; 
 }
 
 .dropdown-item {
     display: block;
     width: 100%;
     padding: 10px 16px;
-    background: none;
+    background: #f8f9fa !important; 
+    background-color: #f8f9fa !important; 
     border: none;
     text-align: left;
     font-size: 14px;
     color: #333;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e0e0e0; 
+    mix-blend-mode: normal !important; 
 }
 
 .dropdown-item:hover {
@@ -348,6 +370,20 @@
 
 .dropdown-item:last-child {
     border-radius: 0 0 6px 6px;
+    border-bottom: none; /* Remove border from last item */
+}
+
+/* Force complete opacity with pseudo-element approach */
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #f8f9fa !important;
+    z-index: -1;
+    border-radius: 6px;
 }
 
 /* workspace submenu */
