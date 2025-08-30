@@ -40,7 +40,7 @@ function toggleDropdown(dropdown) {
         dropdown.classList.add('active');
         SidebarState.activeDropdown = dropdown;
         
-        // Position the dropdown menu
+        // Position the dropdown menu for fixed positioning
         const menu = dropdown.querySelector('.dropdown-menu');
         const toggle = dropdown.querySelector('.dropdown-toggle');
         const toggleRect = toggle.getBoundingClientRect();
@@ -52,7 +52,7 @@ function toggleDropdown(dropdown) {
 }
 
 /**
- * Close all open dropdowns
+ * close all open dropdowns
  */
 function closeAllDropdowns() {
     const activeDropdowns = document.querySelectorAll('.dropdown.active');
@@ -63,7 +63,7 @@ function closeAllDropdowns() {
 }
 
 /**
- * Handle dropdown action clicks
+ * handle dropdown action clicks
  */
 function handleDropdownAction(item, dropdown) {
     const action = item.dataset.action;
@@ -96,11 +96,11 @@ function handleDropdownAction(item, dropdown) {
             break;
     }
     
-    // Close dropdown after action
+    // close dropdown 
     dropdown.classList.remove('active');
 }
 
-// Export for use in other modules
+// export to other file
 window.initializeDropdowns = initializeDropdowns;
 window.toggleDropdown = toggleDropdown;
 window.closeAllDropdowns = closeAllDropdowns;
