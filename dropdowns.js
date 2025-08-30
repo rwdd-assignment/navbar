@@ -80,7 +80,13 @@ function handleDropdownAction(item, dropdown) {
             handleAddTask(workspaceItem);
             break;
         case 'rename':
-            handleRename(workspaceItem ? workspaceItem.querySelector('.workspace-name') : taskItem.querySelector('.task-name'));
+            if (taskItem) {
+                // if is task dropdown - rename the task
+                handleRename(taskItem.querySelector('.task-name'));
+            } else if (workspaceItem) {
+                // if is workspace dropdown - rename the workspace
+                handleRename(workspaceItem.querySelector('.workspace-name'));
+            }
             break;
         case 'hide':
             handleHideUnhide(workspaceItem);
