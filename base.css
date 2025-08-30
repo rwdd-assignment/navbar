@@ -1,4 +1,4 @@
-/* Base CSS - Reset, Layout, and Common Utilities */
+/* Base - Reset, Layout and Common Functionality */
 
 /* Reset and Base Styles */
 * {
@@ -43,7 +43,7 @@ body {
     }
 }
 
-/* Animation Classes */
+/* animation class */
 .fade-in {
     animation: fadeIn 0.3s ease;
 }
