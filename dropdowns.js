@@ -1,0 +1,107 @@
+
+/**
+ * init dropdown functionality for all dropdown elements
+ * handle toggle, position
+ */
+function initializeDropdowns() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const menu = dropdown.querySelector('.dropdown-menu');
+        
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleDropdown(dropdown);
+        });
+        
+        // Handle dropdown item clicks
+        const items = dropdown.querySelectorAll('.dropdown-item');
+        items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleDropdownAction(item, dropdown);
+            });
+        });
+    });
+}
+
+/**
+ * dropdown visibility
+ */
+function toggleDropdown(dropdown) {
+    // Close other dropdowns first
+    closeAllDropdowns();
+    
+    if (dropdown.classList.contains('active')) {
+        dropdown.classList.remove('active');
+        SidebarState.activeDropdown = null;
+    } else {
+        dropdown.classList.add('active');
+        SidebarState.activeDropdown = dropdown;
+        
+        // Position the dropdown menu
+        const menu = dropdown.querySelector('.dropdown-menu');
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const toggleRect = toggle.getBoundingClientRect();
+        
+        // Position the menu below the toggle button
+        menu.style.left = (toggleRect.left - 160 + toggleRect.width) + 'px';
+        menu.style.top = (toggleRect.bottom + 5) + 'px';
+    }
+}
+
+/**
+ * Close all open dropdowns
+ */
+function closeAllDropdowns() {
+    const activeDropdowns = document.querySelectorAll('.dropdown.active');
+    activeDropdowns.forEach(dropdown => {
+        dropdown.classList.remove('active');
+    });
+    SidebarState.activeDropdown = null;
+}
+
+/**
+ * Handle dropdown action clicks
+ */
+function handleDropdownAction(item, dropdown) {
+    const action = item.dataset.action;
+    const workspaceItem = dropdown.closest('.workspace-item');
+    const taskItem = dropdown.closest('.task-item');
+    
+    console.log(`Dropdown action: ${action}`);
+    
+    switch (action) {
+        case 'invite':
+            handleInviteMember(workspaceItem);
+            break;
+        case 'add-task':
+            handleAddTask(workspaceItem);
+            break;
+        case 'rename':
+            handleRename(workspaceItem ? workspaceItem.querySelector('.workspace-name') : taskItem.querySelector('.task-name'));
+            break;
+        case 'hide':
+            handleHideUnhide(workspaceItem);
+            break;
+        case 'grant-access':
+            handleGrantAccess(taskItem);
+            break;
+        case 'pin':
+            handlePinTask(taskItem);
+            break;
+        case 'delete':
+            handleDeleteTask(taskItem);
+            break;
+    }
+    
+    // Close dropdown after action
+    dropdown.classList.remove('active');
+}
+
+// Export for use in other modules
+window.initializeDropdowns = initializeDropdowns;
+window.toggleDropdown = toggleDropdown;
+window.closeAllDropdowns = closeAllDropdowns;
+window.handleDropdownAction = handleDropdownAction;
